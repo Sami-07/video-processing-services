@@ -1,0 +1,1 @@
+ALTER TABLE "video" ALTER COLUMN "description" SET DATA TYPE varchar;

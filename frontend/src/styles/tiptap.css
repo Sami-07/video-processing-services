@@ -1,0 +1,85 @@
+.description-content {
+    max-width: 1000px; /* Center the content with a max width */
+    margin: 0 auto; /* Center the blog content */
+   
+}
+
+.description-content h1 {
+    font-size: 2.5em; /* Increased font size for main title */
+    font-weight: bold;
+    margin-bottom: 20px; /* Space below the title */
+}
+
+.description-content h2 {
+    font-size: 2em; /* Increased font size for subheadings */
+    font-weight: bold;
+    margin-top: 20px; /* Space above the subheading */
+    margin-bottom: 15px; /* Space below the subheading */
+}
+
+.description-content h3 {
+    font-size: 1.75em;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.description-content h4 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 8px;
+}
+
+.description-content h5 {
+    font-size: 1.25em;
+    font-weight: bold;
+    margin-top: 8px;
+    margin-bottom: 6px;
+}
+
+.description-content h6 {
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 6px;
+    margin-bottom: 4px;
+}
+
+.description-content ol {
+    list-style-type: decimal;
+    padding-left: 20px;
+    margin-bottom: 20px; /* Space below ordered lists */
+}
+
+.description-content ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin-bottom: 20px; /* Space below unordered lists */
+}
+
+.description-content p {
+    font-size: 1em;
+    line-height: 1.6; /* Improved line height for readability */
+    margin-bottom: 15px; /* Space below paragraphs */
+}
+
+.description-content em {
+    font-style: italic;
+}
+
+.description-content strong {
+    font-weight: bold;
+}
+
+.description-content s {
+    text-decoration: line-through;
+}
+
+.description-content img, 
+.description-content video {
+    width: 100%;
+    height: auto;
+    max-width: 1000px; /* Consistent max width for images and videos */
+    display: block;
+    margin: 20px auto; /* Space around images and videos */
+}
