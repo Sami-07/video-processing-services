@@ -1,6 +1,6 @@
 # HLS Video Transcoding Platform
 
-![Demo Video](HLS-demo.mp4)
+![Demo Video](https://yjl98ivw6f.ufs.sh/f/BPueypH3e51CBmdOie3e51C0VOFpWvtqsdEr8USTlLQoIJZb)
 
 ## Overview
 
@@ -17,7 +17,7 @@ This project is a scalable video transcoding platform that converts uploaded vid
 
 ## Architecture
 
-![Architecture](architecture-diagram.png)
+![Architecture](https://yjl98ivw6f.ufs.sh/f/BPueypH3e51CPoQC1nYUEK9wn06vjOyG4ka7rVLMbs3Xo1ux)
 
 The project consists of three main components:
 
