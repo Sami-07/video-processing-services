@@ -1,6 +1,6 @@
 # HLS Video Transcoding Platform
 
-https://github.com/user-attachments/assets/15778f07-b3db-40a8-bb32-ec1b61856838
+https://yjl98ivw6f.ufs.sh/f/BPueypH3e51CBmdOie3e51C0VOFpWvtqsdEr8USTlLQoIJZb
 
 ## Overview
 
