@@ -17,7 +17,7 @@ This project is a scalable video transcoding platform that converts uploaded vid
 
 ## Architecture
 
-![Architecture](architecture.svg)
+![Architecture](architecture-diagram.svg)
 
 The project consists of three main components:
 
