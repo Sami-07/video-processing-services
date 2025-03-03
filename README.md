@@ -1,6 +1,6 @@
 # HLS Video Transcoding Platform
 
-![Demo Video](HLS-demo-video.mp4)
+![Demo Video](HLS-demo.mp4)
 
 ## Overview
 
