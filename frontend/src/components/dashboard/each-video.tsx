@@ -30,7 +30,7 @@ export default function EachVideo({ video }: { video: VideoType }) {
         fullName: creatorData.fullName || "",
         imageUrl: creatorData.imageUrl || "",
     };
-    console.log("creatorData", creatorData)
+    // console.log("creatorData", creatorData)
     return (
         <DisplayEachVideo video={video} thumbnailUrl={thumbnailUrl} creatorData={simplifiedCreatorData} />
     )

@@ -11,7 +11,7 @@ export default clerkMiddleware(async (auth, req) => {
     console.log('Middleware executed', req.url);
     const { userId } = await auth();
     console.log("userId", userId);
-    if (isPublicRoute(req) && userId) {
+    if (isPublicRoute(req) && userId && req.url != process.env.NEXT_PUBLIC_FRONTEND_URL) {
         console.log('Public route, but user ID found', req.url);
         return NextResponse.redirect(new URL('/dashboard/all-videos', req.url));
     }

@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import {
@@ -22,6 +24,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useUser } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
 import '@/styles/tiptap.css'
+import { Loader2 } from 'lucide-react'
 type FileWithPreview = File & {
     preview?: string;
 }
@@ -44,7 +47,8 @@ export default function UploadVideo() {
     const { toast } = useToast()
     const { user, isLoaded } = useUser()
     const router = useRouter()
-    if (!isLoaded) return null
+    const [open, setOpen] = useState(false)
+ 
     const [formData, setFormData] = useState<VideoFormData>({
         title: '',
         description: '',
@@ -160,15 +164,18 @@ export default function UploadVideo() {
                 title: 'Video uploaded successfully',
                 description: "Your video has been uploaded successfully. The video transcoding has started. You can view it after it's done.",
             })
-            setTimeout(() => {
-                router.push(`/transcoding-status/${videoKey}`)
-            }, 2000)
+            // Close the dialog
+            setOpen(false)
+            // Redirect to transcoding status page
+            router.push(`/transcoding-status/${videoKey}`)
         }
     })
+
+    if (!isLoaded) return null
     return (
         <div>
-            <Dialog>
-                <DialogTrigger className='flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-md'>
+            <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger className='flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors'>
                     Upload Video <Icons.Upload />
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[625px] overflow-y-auto max-h-full">
@@ -272,16 +279,25 @@ export default function UploadVideo() {
                         {/* Upload Button */}
                         {formData.videoFile && formData.thumbnail ? (
                             <button
-                                className="w-full px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors"
+                                className="w-full px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
                                 onClick={() => uploadVideo()}
                                 disabled={isPending}
                             >
-                                {isPending ? 'Uploading...' : 'Upload'}
+                                {isPending ? (
+                                  <>
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                    Uploading...
+                                  </>
+                                ) : (
+                                  <>
+                                    <Icons.Upload className="w-4 h-4" />
+                                    Upload
+                                  </>
+                                )}
                             </button>
                         ) : (
                             <button
-                                className="w-full px-4 py-2 bg-gray-300 text-gray-500 rounded-md cursor-not-allowed"
-
+                                className="w-full px-4 py-2 bg-gray-300 text-gray-500 rounded-md cursor-not-allowed flex items-center justify-center gap-2"
                                 onClick={() => {
                                     toast({
                                         title: 'Please upload a video and thumbnail',
@@ -289,7 +305,8 @@ export default function UploadVideo() {
                                     })
                                 }}
                             >
-                                {isPending ? 'Uploading...' : 'Upload'}
+                                <Icons.Upload className="w-4 h-4" />
+                                Upload
                             </button>
                         )}
                     </div>

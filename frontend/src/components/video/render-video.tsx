@@ -2,13 +2,12 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Hls from 'hls.js';
-import { getAwsUrl, getThumbnailAwsUrl } from '@/utils/get-aws-url';
+import { getAwsUrl } from '@/utils/get-aws-url';
 import { VideoType } from '@/lib/types/video-type';
-import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Share2, MoreHorizontal, Bell } from 'lucide-react'
+import { Share2, Bell } from 'lucide-react'
 import {
     Select,
     SelectContent,
@@ -28,7 +27,6 @@ export default function YouTubeStylePlayer({ video, thumbnailUrl, creatorData }:
     const {user, isLoaded} = useUser();
     const { toast } = useToast();
     const videoRef = useRef<HTMLVideoElement>(null);
-    const [isExpanded, setIsExpanded] = useState(false);
     const [qualities, setQualities] = useState<{ value: string; label: string }[]>([]);
     const [currentQuality, setCurrentQuality] = useState<string>('auto');
     const [hls, setHls] = useState<Hls | null>(null);
@@ -53,8 +51,6 @@ export default function YouTubeStylePlayer({ video, thumbnailUrl, creatorData }:
                         value: index.toString(),
                         label: `${level.height}p`
                     }));
-                    console.log("availableQualities", availableQualities)
-                    console.log("HLS", hlsInstance)
                     setQualities([{ value: 'auto', label: 'Auto' }, ...availableQualities]);
                 });
 
@@ -80,7 +76,6 @@ export default function YouTubeStylePlayer({ video, thumbnailUrl, creatorData }:
             const currentLevel = hls.levels[levelIndex];
             const resolution = currentLevel ? `${currentLevel.height}p` : 'Auto';
             console.log("Switched to:", resolution);
-            
             // Force immediate switch if not auto
             if (quality !== 'auto') {
                 hls.nextLevel = levelIndex;  // Use nextLevel for immediate switch
@@ -91,8 +86,6 @@ export default function YouTubeStylePlayer({ video, thumbnailUrl, creatorData }:
         queryKey: ["isSubscribed", user?.id, video.userId],
         queryFn: async () => {
             const response = await axios.get(`/api/videos/subscribe?subscriberId=${user?.id}&creatorId=${video.userId}`);
-            console.log("response", response.data)
-            console.log("cooool", response.data.isSubscribed)
             return response.data.isSubscribed;
         }
     })
@@ -136,81 +129,114 @@ export default function YouTubeStylePlayer({ video, thumbnailUrl, creatorData }:
         subscribe();
     };
 
+    const handleShare = () => {
+        navigator.clipboard.writeText(window.location.href);
+        toast({
+            title: 'URL copied to clipboard!',
+            description: 'You can now share this video with others',
+        });
+    };
+
     if (!isLoaded) return null;
     return (
-        <div className="max-w-4xl mx-auto mt-8">
-            <div className="relative pt-[56.25%]">
-                <video
-                    ref={videoRef}
-                    controls
-                    className="absolute top-0 left-0 w-full h-full"
-                    poster={thumbnailUrl}
-                ></video>
+        <div>
+            {/* Video Player */}
+            <div className="relative overflow-hidden rounded-lg">
+                <div className="relative pt-[56.25%] bg-gray-900">
+                    <video
+                        ref={videoRef}
+                        controls
+                        className="absolute top-0 left-0 w-full h-full"
+                        poster={thumbnailUrl}
+                    ></video>
+                </div>
             </div>
 
+            {/* Video Info */}
             <div className="mt-4">
-                <h1 className="text-2xl font-bold">{video.title}</h1>
-                <div className="flex justify-between items-center mt-2">
-                    <div className="flex items-center space-x-4">
-                        <Avatar>
+                <h1 className="text-2xl font-bold text-white mb-2">{video.title}</h1>
+                
+                <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mt-2 pb-4 border-b border-gray-700">
+                    {/* Creator Info */}
+                    <div className="flex items-center gap-4">
+                        <Avatar className="h-10 w-10 border border-gray-700">
                             <AvatarImage src={creatorData.imageUrl} />
-                            <AvatarFallback>{creatorData.fullName[0]}</AvatarFallback>
+                            <AvatarFallback className="bg-gradient-to-br from-blue-400 to-indigo-600 text-white">
+                                {creatorData.fullName[0]}
+                            </AvatarFallback>
                         </Avatar>
                         <div>
-                            <p className="font-semibold">{creatorData.fullName}</p>
-                            <p className="text-sm text-gray-500">
-                                {new Date(video.createdAt).toLocaleDateString()}
+                            <p className="font-semibold text-white">{creatorData.fullName}</p>
+                            <p className="text-sm text-gray-400">
+                                {subscriberCount || 0} subscribers
                             </p>
                         </div>
                     </div>
-                    <div className="flex items-center space-x-2 text-black">
-                        <p className="text-xs text-gray-200">{subscriberCount} Subscribers</p>
-                        <Button
-                            variant={isSubscribed ? "secondary" : "default"}
-                            className={`${isSubscribed ? "bg-gray-200" : "bg-red-500"} ${creatorData.id === user?.id ? "hidden" : ""}`}
-                            size="sm"
-                            onClick={handleSubscribe}
+                    
+                    {/* Interaction Buttons */}
+                    <div className="flex flex-wrap items-center gap-2">
+                        {creatorData.id !== user?.id && (
+                            <Button
+                                variant={isSubscribed ? "outline" : "default"}
+                                className={`${isSubscribed 
+                                    ? "bg-gray-800 text-white hover:bg-gray-700 border-gray-600" 
+                                    : "bg-blue-600 hover:bg-blue-700"}`}
+                                size="sm"
+                                onClick={handleSubscribe}
+                            >
+                                {isSubscribed ? (
+                                    <>
+                                        <Bell className="mr-2 h-4 w-4" /> Subscribed
+                                    </>
+                                ) : (
+                                    'Subscribe'
+                                )}
+                            </Button>
+                        )}
+                        
+                        <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="text-gray-300 hover:bg-gray-700 hover:text-white"
+                            onClick={handleShare}
                         >
-                            {isSubscribed ? (
-                                <>
-                                    <Bell className="mr-2 h-4 w-4" /> Subscribed
-                                </>
-                            ) : (
-                                'Subscribe'
-                            )}
-                        </Button>
-                        {/* <Button variant="outline" size="sm" onClick={() => {
-                            navigator.clipboard.writeText(window.location.href);
-                            toast({
-                                title: 'URL copied to clipboard!',
-                                description: 'You can now share the link to of this video with your friends!',
-                            });
-                        }}>
                             <Share2 className="mr-2 h-4 w-4" /> Share
-                        </Button> */}
-
+                        </Button>
                     </div>
                 </div>
             </div>
 
-            <Card className="mt-4">
-                <CardContent className="pt-4">
-                    <div className="flex justify-between items-center mb-2">
-                        <p className="font-semibold">Description</p>
-                        <Select value={currentQuality} onValueChange={handleQualityChange}>
-                            <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Select quality" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {qualities.map((quality) => (
-                                    <SelectItem key={quality.value} value={quality.value}>
-                                        {quality.label}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+            {/* Description and Video Quality */}
+            <Card className="mt-4 bg-gray-800 border-gray-700 shadow-lg overflow-hidden">
+                <CardContent className="p-4">
+                    <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-4">
+                        <div className="flex items-center gap-2 text-gray-300">
+                            <span>{new Date(video.createdAt).toLocaleDateString()}</span>
+                        </div>
+                        
+                        <div className="flex items-center">
+                            <span className="text-sm text-gray-300 mr-2">Quality:</span>
+                            <Select value={currentQuality} onValueChange={handleQualityChange}>
+                                <SelectTrigger className="w-[120px] bg-gray-700 border-gray-600 text-white">
+                                    <SelectValue placeholder="Select quality" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-gray-700 border-gray-600 text-white">
+                                    {qualities.map((quality) => (
+                                        <SelectItem key={quality.value} value={quality.value}>
+                                            {quality.label}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
                     </div>
-                    <RenderDescription description={video.description} />
+                    
+                    <div className="text-gray-200">
+                        <h2 className="font-semibold text-white mb-2">Description</h2>
+                        <div className="prose prose-invert max-w-none">
+                            <RenderDescription description={video.description} />
+                        </div>
+                    </div>
                 </CardContent>
             </Card>
         </div>

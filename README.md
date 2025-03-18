@@ -1,14 +1,17 @@
-# HLS Video Transcoding Platform
+# MyTube - A Scalable Video Transcoding Platform
 
 
+## Demo Video
+https://github.com/user-attachments/assets/683d3059-4e1d-46e9-9355-99db1c004206
 
-https://github.com/user-attachments/assets/5f2f5543-f109-40cd-827b-c248929e3aba
 
+## Multiple Video Upload
+https://github.com/user-attachments/assets/84855fe9-9d38-40a0-ba1c-8a5fa5d22699
 
 
 ## Overview
 
-This project is a scalable video transcoding platform that converts uploaded videos into HTTP Live Streaming (HLS) format for adaptive bitrate streaming. It allows users to upload videos, which are then automatically transcoded into multiple resolutions and all the videos are segmented into chunks and made available for streaming.
+This project is a scalable video transcoding platform that allows users to upload, process, and share videos. It converts uploaded videos into HTTP Live Streaming (HLS) format for adaptive bitrate streaming, making them available for streaming on any device.
 
 ## Features
 
@@ -43,6 +46,21 @@ The project consists of three main components:
 - Generates HLS playlists and segments
 - Uploads transcoded content to S3
 - Updates transcoding status in DynamoDB
+
+
+## Workflow
+- User uploads a video through the dashboard interface
+- Raw video gets uploaded to the S3 raw videos bucket
+- Upload event is sent to AWS SQS queue
+- Node.js Video Consumer polls for video upload events
+- When an event is found, a container is spun up to process the video
+- The video is passed to the FFmpeg microservice
+- FFmpeg transcodes the video into HLS format with multiple quality levels
+- Transcoding status is written to DynamoDB
+- Transcoded segments and manifest are stored in production S3 bucket
+- Client receives index.m3u8 file when video is requested
+- Video segments stream in real-time with adaptive bitrate
+
 
 ## Tech Stack
 
@@ -115,8 +133,8 @@ BUCKET_NAME=your_source_bucket_name
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/hls-video-platform.git
-   cd hls-video-platform
+   git clone https://github.com/yourusername/mytube.git
+   cd mytube
    ```
 
 2. **Setup Frontend**

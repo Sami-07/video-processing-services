@@ -13,7 +13,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 export default function page() {
     const searchParams = useSearchParams()
     const search = searchParams.get('search')
-    
+    console.log("search", search)
     const { user, isLoaded } = useUser();
     
     const fetchVideos = async ({ pageParam = 1 }) => {

@@ -6,11 +6,11 @@ import { eq } from "drizzle-orm";
 export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url);
-        const videoId = searchParams.get('videoId');
-        if (!videoId) {
+        const videoKey = searchParams.get('videoKey');
+        if (!videoKey) {
         return NextResponse.json({ message: "Video ID is required" }, { status: 400 });
     }
-    const video = await db.select().from(Video).where(eq(Video.id, videoId));
+    const video = await db.select().from(Video).where(eq(Video.videoKey, videoKey));
     console.log("video", video)
     if (!video) {
         return NextResponse.json({ message: "Video not found" }, { status: 404 });

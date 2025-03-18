@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/drizzle/db";
 import { Video } from "@/drizzle/schema";
 import { count, eq } from "drizzle-orm";
-import { like } from "drizzle-orm";
+import { like, ilike } from "drizzle-orm";
 export async function GET(request: Request) {
    try {
 
@@ -16,12 +16,12 @@ export async function GET(request: Request) {
       if(search){
          totalCount = await db.select({count:count()})
            .from(Video)
-           .where(like(Video.title, `${search}%`)) // Use like for pattern matching
+           .where(ilike(Video.title, `%${search}%`)) // Use like for pattern matching
            .then((res)=>res[0].count);
          console.log("totalCount", totalCount);
          videos = await db.select()
            .from(Video)
-           .where(like(Video.title, `${search}%`)) // Use like for pattern matching
+           .where(ilike(Video.title, `%${search}%`)) // Use like for pattern matching
            .limit(limit)
            .offset(offset);
        }else{

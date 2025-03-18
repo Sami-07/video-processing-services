@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import React from 'react'
 import { usePathname } from 'next/navigation'
+import UploadVideo from '../profile/upload-video'
 
 export default function DashboardContent() {
     const pathname = usePathname()
@@ -10,33 +11,45 @@ export default function DashboardContent() {
         {
             name: "All Videos",
             href: "/dashboard/all-videos",
+            icon: (
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect width="18" height="18" x="3" y="3" rx="2" />
+                    <path d="M9 8a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v8a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />
+                </svg>
+            )
         },
-        {
-            name: "Subscribed Videos",
-            href: "/dashboard/subscribed-videos",
-        },
-    ]
+       
+       
+    ];
 
     return (
-        <div className='mt-10'>
-            
+        <div className="mt-6 mb-8">
+            <div className="flex overflow-x-auto no-scrollbar py-2">
+                <div className="flex gap-2 mx-auto">
+                    {tabs.map((tab) => {
+                        const isActive = pathname === tab.href;
+                        return (
+                            <Link
+                                key={tab.name}
+                                href={tab.href}
+                                className={`
+                                    flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all whitespace-nowrap
+                                    ${isActive 
+                                        ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md' 
+                                        : 'bg-gray-800 text-gray-300 hover:bg-gray-700 border border-gray-700'}
+                                `}
+                            >
+                                <span className={`${isActive ? 'text-white' : 'text-gray-400'}`}>
+                                    {tab.icon}
+                                </span>
+                                <span className="font-medium text-sm">{tab.name}</span>
+                            </Link>
+                        );
+                    })}
+                   
+                </div>
+            </div>
         </div>
-        // <nav className="flex flex-row space-y-0 space-x-4 bg-white shadow rounded-lg p-2 mb-4 mt-2">
-        //     {tabs.map((tab) => (
-        //         <Link
-        //             key={tab.name}
-        //             href={tab.href}
-        //             className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150 ease-in-out
-        //                 ${pathname === tab.href
-        //                     ? 'bg-gray-200 text-gray-900 hover:bg-gray-300'
-        //                     : 'text-gray-200 hover:bg-gray-100 hover:text-gray-900'
-        //                 }
-        //             `}
-        //         >
-        //             {tab.name}
-        //         </Link>
-        //     ))}
-        // </nav>
-    )
+    );
 }
 

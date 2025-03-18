@@ -63,8 +63,8 @@ function main() {
                         const { bucket, object: { key } } = s3;
                         // Spin up a Docker container
                         const command = new client_ecs_1.RunTaskCommand({
-                            cluster: process.env.CLUSTER_NAME,
-                            taskDefinition: process.env.TASK_DEFINITION,
+                            cluster: process.env.CLUSTER_NAME, //ARN of the cluster
+                            taskDefinition: process.env.TASK_DEFINITION, //ARN of the task definition
                             launchType: "FARGATE",
                             networkConfiguration: {
                                 awsvpcConfiguration: {
@@ -75,7 +75,7 @@ function main() {
                             },
                             overrides: {
                                 containerOverrides: [{
-                                        name: "video-transcoding-container",
+                                        name: process.env.CONTAINER_NAME, //Name of the container in the task definition
                                         environment: [{
                                                 name: "BUCKET_NAME",
                                                 value: bucket.name
