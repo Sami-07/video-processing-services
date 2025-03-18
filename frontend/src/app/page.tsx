@@ -8,8 +8,9 @@ import { StickyScroll } from "@/components/ui/sticky-scroll-reveal";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 import { TracingBeam } from "@/components/ui/tracing-beam";
 import Image from "next/image";
-
+import { useRouter } from "next/navigation";
 export default function Home() {
+  const router = useRouter();
   return (
     <div className="w-full">
       {/* Hero Section */}
@@ -20,28 +21,43 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-teal-400 mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-teal-400">
               MyTube - A scalable cloud solution for video transcoding.
             </h1>
           </motion.div>
           
           <TextGenerateEffect
             words="A scalable cloud solution for video streaming and content sharing."
-            className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-8"
+            className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto"
           />
+          
+          {/* Complete workflow demo video */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="w-full max-w-4xl mx-auto mb-8 rounded-xl overflow-hidden shadow-2xl shadow-blue-500/20"
+          >
+            <video 
+              controls 
+              className="w-full h-auto rounded-xl border border-gray-700"
+        
+            >
+              <source src="/demos/new hls demo.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </motion.div>
           
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center mt-10"
+            className="flex flex-col sm:flex-row gap-4 justify-center my-0"
           >
-            <button className="px-8 py-3 rounded-full bg-gradient-to-r from-blue-500 to-teal-500 text-white font-medium text-lg hover:shadow-lg hover:scale-105 transition duration-200">
+            <button onClick={() => router.push("/dashboard/all-videos")} className="px-8 py-3 rounded-full bg-gradient-to-r from-blue-500 to-teal-500 text-white font-medium text-lg hover:shadow-lg hover:scale-105 transition duration-200">
               Get Started
             </button>
-            <button className="px-8 py-3 rounded-full border border-white/20 text-white font-medium text-lg hover:bg-white/10 transition duration-200">
-              View Demo
-            </button>
+          
           </motion.div>
         </div>
         
@@ -65,6 +81,28 @@ export default function Home() {
           <h2 className="text-3xl md:text-5xl font-bold text-center text-white mb-16">
             Powerful Features
           </h2>
+          
+          {/* Scalability demo video */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="w-full max-w-4xl mx-auto mb-16 rounded-xl overflow-hidden shadow-2xl shadow-blue-500/20 border border-gray-700"
+          >
+            <h3 className="text-xl font-semibold text-white p-4 bg-gray-800/50 backdrop-blur-sm">Scalability Demonstration</h3>
+            <video 
+              controls 
+              className="w-full h-auto rounded-xl border border-gray-700"
+             
+            >
+              <source src="/demos/2 videos upload demo hls.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <div className="p-4 bg-gray-800/50 backdrop-blur-sm">
+              <p className="text-gray-300">This demo shows how our system scales by processing multiple videos simultaneously, with each video getting its own dedicated container.</p>
+            </div>
+          </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {[
