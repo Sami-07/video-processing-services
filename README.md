@@ -8,6 +8,8 @@ https://github.com/user-attachments/assets/683d3059-4e1d-46e9-9355-99db1c004206
 ## Multiple Video Upload
 https://github.com/user-attachments/assets/84855fe9-9d38-40a0-ba1c-8a5fa5d22699
 
+## AWS S3 Containing videos segments of different qualities and manifest files
+https://github.com/user-attachments/assets/761b756b-94fa-47c8-a7db-a2c7d8aa68cc
 
 ## Overview
 
