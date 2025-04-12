@@ -135,7 +135,7 @@ BUCKET_NAME=your_source_bucket_name
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/mytube.git
+   git clone https://github.com/Sami-07/video-processing-services.git
    cd mytube
    ```
 
